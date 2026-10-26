@@ -1,10 +1,22 @@
 import fs from 'fs';
 import path from 'path';
+import os from 'os';
 import { User, DocumentItem, StorageData, PermissionRole, DocumentShare, DocumentAttachment, DocumentVersion } from '@/types';
 import { SEED_USERS } from '@/lib/constants';
 
-const DATA_DIR = path.join(process.cwd(), 'data');
-const STORAGE_FILE = path.join(DATA_DIR, 'storage.json');
+function getStoragePath(): string {
+  // On Vercel or AWS Lambda, the working directory is read-only.
+  // We use /tmp which is the designated writable directory in serverless environments.
+  if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME || !process.cwd().includes(':')) {
+    return path.join(os.tmpdir(), 'ajaia_storage.json');
+  }
+  return path.join(process.cwd(), 'data', 'storage.json');
+}
+
+// In-memory global cache to survive across serverless function warm executions
+declare global {
+  var __AJAIA_STORAGE_CACHE__: StorageData | undefined;
+}
 
 export const INITIAL_DOCUMENTS: DocumentItem[] = [
   {
@@ -155,50 +167,95 @@ interface DocumentState {
   },
 ];
 
-function ensureDataDir(): void {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
+function ensureDirExists(filePath: string): void {
+  try {
+    const dir = path.dirname(filePath);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+  } catch (err) {
+    // Ignore if directory exists or read-only
   }
 }
 
 function readStorage(): StorageData {
-  ensureDataDir();
-  if (!fs.existsSync(STORAGE_FILE)) {
-    const initialData: StorageData = {
-      users: SEED_USERS,
-      documents: INITIAL_DOCUMENTS,
-    };
-    writeStorage(initialData);
-    return initialData;
+  // 1. If global in-memory cache is populated, return it immediately
+  if (globalThis.__AJAIA_STORAGE_CACHE__) {
+    return globalThis.__AJAIA_STORAGE_CACHE__;
   }
 
+  const targetPath = getStoragePath();
+
+  // 2. Try reading from writable target path
   try {
-    const raw = fs.readFileSync(STORAGE_FILE, 'utf-8');
-    const parsed = JSON.parse(raw) as StorageData;
-    // Guarantee users list includes seeded users
-    const userMap = new Map<string, User>();
-    SEED_USERS.forEach((u) => userMap.set(u.id, u));
-    (parsed.users || []).forEach((u) => userMap.set(u.id, u));
-    parsed.users = Array.from(userMap.values());
-    if (!parsed.documents) parsed.documents = [];
-    return parsed;
+    if (fs.existsSync(targetPath)) {
+      const raw = fs.readFileSync(targetPath, 'utf-8');
+      const parsed = JSON.parse(raw) as StorageData;
+      if (parsed && Array.isArray(parsed.documents)) {
+        globalThis.__AJAIA_STORAGE_CACHE__ = parsed;
+        return parsed;
+      }
+    }
   } catch (err) {
-    console.error('Failed reading storage, resetting to seed data:', err);
-    const initialData: StorageData = {
-      users: SEED_USERS,
-      documents: INITIAL_DOCUMENTS,
-    };
-    writeStorage(initialData);
-    return initialData;
+    console.warn('Could not read from target path, checking fallback:', err);
   }
+
+  // 3. Try reading from bundled project data directory if present
+  try {
+    const bundledPath = path.join(process.cwd(), 'data', 'storage.json');
+    if (fs.existsSync(bundledPath)) {
+      const raw = fs.readFileSync(bundledPath, 'utf-8');
+      const parsed = JSON.parse(raw) as StorageData;
+      if (parsed && Array.isArray(parsed.documents)) {
+        globalThis.__AJAIA_STORAGE_CACHE__ = parsed;
+        return parsed;
+      }
+    }
+  } catch (err) {
+    // bundled file may not exist or not be readable
+  }
+
+  // 4. Initialize with pristine seed data
+  const initialData: StorageData = {
+    users: SEED_USERS,
+    documents: INITIAL_DOCUMENTS,
+  };
+  globalThis.__AJAIA_STORAGE_CACHE__ = initialData;
+
+  // Best-effort write to disk
+  try {
+    writeStorage(initialData);
+  } catch (e) {}
+
+  return initialData;
 }
 
 function writeStorage(data: StorageData): void {
-  ensureDataDir();
-  // Atomic write using temp file to prevent partial file corruption
-  const tempPath = `${STORAGE_FILE}.tmp.${Date.now()}`;
-  fs.writeFileSync(tempPath, JSON.stringify(data, null, 2), 'utf-8');
-  fs.renameSync(tempPath, STORAGE_FILE);
+  // Always update global in-memory cache first so mutations succeed even in read-only lambda containers
+  globalThis.__AJAIA_STORAGE_CACHE__ = data;
+
+  const targetPath = getStoragePath();
+  ensureDirExists(targetPath);
+
+  try {
+    // Try atomic write using temp file
+    const tempPath = `${targetPath}.tmp.${Date.now()}`;
+    fs.writeFileSync(tempPath, JSON.stringify(data, null, 2), 'utf-8');
+    fs.renameSync(tempPath, targetPath);
+  } catch (err) {
+    // If atomic rename fails (e.g. cross-device or permission), try direct write
+    try {
+      fs.writeFileSync(targetPath, JSON.stringify(data, null, 2), 'utf-8');
+    } catch (directErr) {
+      // In serverless read-only container, fallback to /tmp
+      try {
+        const tmpPath = path.join(os.tmpdir(), 'ajaia_storage.json');
+        fs.writeFileSync(tmpPath, JSON.stringify(data, null, 2), 'utf-8');
+      } catch (tmpErr) {
+        console.warn('Filesystem persistence unavailable in environment, retained in memory cache.');
+      }
+    }
+  }
 }
 
 // User operations
