@@ -16,8 +16,8 @@
 ### 2. Local Setup
 ```bash
 # Clone the repository
-git clone <repo-url>
-cd project
+git clone https://github.com/Namansingh3264/ajaja.git
+cd ajaja
 
 # Install dependencies
 npm install

@@ -19,10 +19,11 @@
 
 ---
 
-## 🔗 Live Deployment & Video Links
+## 🔗 Repository & Live Deployment Links
 
-- **Live Product URL**: `https://ajaia-docs.vercel.app` *(or run locally via `npm run dev` at `http://localhost:3000`)*
-- **Walkthrough Video URL**: [Link to Public Loom / YouTube Walkthrough](https://youtu.be/sample-ajaia-docs-walkthrough) *(also recorded in `WALKTHROUGH_VIDEO.txt`)*
+- **GitHub Repository**: [https://github.com/Namansingh3264/ajaja](https://github.com/Namansingh3264/ajaja)
+- **Local URL**: `http://localhost:3000` (runs out-of-the-box via `npm run dev`)
+- **Walkthrough Video URL**: [Link to Public Loom / YouTube Walkthrough](https://youtu.be/sample-ajaia-docs-walkthrough) *(documented in `WALKTHROUGH_VIDEO.txt`)*
 
 ---
 

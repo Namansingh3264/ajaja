@@ -27,6 +27,28 @@
   ],
   "documents": [
     {
+      "id": "doc_1793011304750_yd5z8",
+      "title": "Team Sync & Action Items",
+      "content": "<h1>Team Sync — 26 Oct 2026</h1><p><strong>Attendees:</strong> Charlie Patel, Engineering &amp; Design Team</p><h2>Agenda</h2><ul><li><p>Review sprint priorities and blockers</p></li><li><p>Document sharing permission model walkthrough</p></li><li><p>Next sprint planning</p></li></ul><h2>Key Decisions</h2><p>Align on atomic filesystem persistence and instant multi-user simulation.</p><h2>Action Items</h2><ol><li><p>Complete automated test suite — Bob</p></li><li><p>Finalize UI layout and typography — Charlie</p></li><li><p>Prepare walkthrough recording and documentation — Alice</p></li></ol>",
+      "ownerId": "usr_charlie",
+      "createdAt": "2026-10-26T10:41:44.750Z",
+      "updatedAt": "2026-10-26T10:41:49.278Z",
+      "lastEditedById": "usr_charlie",
+      "shares": [],
+      "attachments": [],
+      "versions": [
+        {
+          "id": "ver_1793011304750",
+          "savedAt": "2026-10-26T10:41:44.750Z",
+          "savedById": "usr_charlie",
+          "savedByName": "Charlie Patel",
+          "title": "Team Sync & Action Items",
+          "content": "<h1>Team Sync — 26 Oct 2026</h1>\n<p><strong>Attendees:</strong> Charlie Patel, Engineering & Design Team</p>\n<h2>Agenda</h2>\n<ul>\n<li>Review sprint priorities and blockers</li>\n<li>Document sharing permission model walkthrough</li>\n<li>Next sprint planning</li>\n</ul>\n<h2>Key Decisions</h2>\n<p>Align on atomic filesystem persistence and instant multi-user simulation.</p>\n<h2>Action Items</h2>\n<ol>\n<li>Complete automated test suite — Bob</li>\n<li>Finalize UI layout and typography — Charlie</li>\n<li>Prepare walkthrough recording and documentation — Alice</li>\n</ol>",
+          "summary": "Document created"
+        }
+      ]
+    },
+    {
       "id": "doc_product_strategy",
       "title": "Q4 Product Strategy & Collaborative Workspace RFC",
       "content": "<h1>Q4 Product Strategy: Next-Generation Collaborative Docs</h1>\n<p>Welcome to the <strong>Ajaia Collaborative Editor</strong> specification document. This document outlines our product vision, core customer pain points, and engineering execution roadmap for Q4.</p>\n<h2>1. Executive Summary</h2>\n<p>Modern knowledge workers switch between too many fragmented tools. Our mission is to build a <em>blazing-fast, distraction-free document editor</em> that combines the real-time fluidity of Google Docs with the modern aesthetic and modularity of Notion.</p>\n<h2>2. Key Pillars</h2>\n<ul>\n<li><strong>Frictionless Creation:</strong> Zero loading delay, instant local-first debounced auto-save, and markdown/docx file ingestion.</li>\n<li><strong>Granular Collaboration:</strong> Transparent document sharing with distinct <code>owner</code>, <code>edit</code>, and <code>view</code> permission boundaries.</li>\n<li><strong>Rich Formatting Engine:</strong> Headings, rich lists, quotes, inline code styling, and clean document export (Markdown, HTML, PDF).</li>\n</ul>\n<h2>3. Immediate Milestones</h2>\n<ol>\n<li>Finalize cross-organization permission matrix (Alice & Bob).</li>\n<li>Support drag-and-drop file imports for legacy document archives.</li>\n<li>Implement version snapshot recovery for asynchronous audit trails.</li>\n</ol>\n<blockquote><p>\"Simplicity is prerequisite for reliability.\" — Edsger W. Dijkstra</p></blockquote>\n<p>Feel free to leave edits or review the permissions in the top right menu.</p>",
