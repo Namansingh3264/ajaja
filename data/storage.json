@@ -1,0 +1,128 @@
+{
+  "users": [
+    {
+      "id": "usr_alice",
+      "name": "Alice Chen",
+      "email": "alice@ajaia.internal",
+      "avatar": "AC",
+      "role": "Product Lead",
+      "color": "#4F46E5"
+    },
+    {
+      "id": "usr_bob",
+      "name": "Bob Martin",
+      "email": "bob@ajaia.internal",
+      "avatar": "BM",
+      "role": "Staff Engineer",
+      "color": "#059669"
+    },
+    {
+      "id": "usr_charlie",
+      "name": "Charlie Patel",
+      "email": "charlie@ajaia.internal",
+      "avatar": "CP",
+      "role": "Lead Designer",
+      "color": "#D97706"
+    }
+  ],
+  "documents": [
+    {
+      "id": "doc_product_strategy",
+      "title": "Q4 Product Strategy & Collaborative Workspace RFC",
+      "content": "<h1>Q4 Product Strategy: Next-Generation Collaborative Docs</h1>\n<p>Welcome to the <strong>Ajaia Collaborative Editor</strong> specification document. This document outlines our product vision, core customer pain points, and engineering execution roadmap for Q4.</p>\n<h2>1. Executive Summary</h2>\n<p>Modern knowledge workers switch between too many fragmented tools. Our mission is to build a <em>blazing-fast, distraction-free document editor</em> that combines the real-time fluidity of Google Docs with the modern aesthetic and modularity of Notion.</p>\n<h2>2. Key Pillars</h2>\n<ul>\n<li><strong>Frictionless Creation:</strong> Zero loading delay, instant local-first debounced auto-save, and markdown/docx file ingestion.</li>\n<li><strong>Granular Collaboration:</strong> Transparent document sharing with distinct <code>owner</code>, <code>edit</code>, and <code>view</code> permission boundaries.</li>\n<li><strong>Rich Formatting Engine:</strong> Headings, rich lists, quotes, inline code styling, and clean document export (Markdown, HTML, PDF).</li>\n</ul>\n<h2>3. Immediate Milestones</h2>\n<ol>\n<li>Finalize cross-organization permission matrix (Alice & Bob).</li>\n<li>Support drag-and-drop file imports for legacy document archives.</li>\n<li>Implement version snapshot recovery for asynchronous audit trails.</li>\n</ol>\n<blockquote><p>\"Simplicity is prerequisite for reliability.\" — Edsger W. Dijkstra</p></blockquote>\n<p>Feel free to leave edits or review the permissions in the top right menu.</p>",
+      "ownerId": "usr_alice",
+      "createdAt": "2026-10-23T10:33:42.696Z",
+      "updatedAt": "2026-10-26T08:33:42.696Z",
+      "lastEditedById": "usr_alice",
+      "shares": [
+        {
+          "id": "share_1",
+          "documentId": "doc_product_strategy",
+          "userId": "usr_bob",
+          "permission": "edit",
+          "sharedAt": "2026-10-24T10:33:42.696Z",
+          "sharedBy": "usr_alice"
+        },
+        {
+          "id": "share_2",
+          "documentId": "doc_product_strategy",
+          "userId": "usr_charlie",
+          "permission": "view",
+          "sharedAt": "2026-10-25T10:33:42.696Z",
+          "sharedBy": "usr_alice"
+        }
+      ],
+      "attachments": [
+        {
+          "id": "att_1",
+          "name": "q4_roadmap_architecture.pdf",
+          "size": 245100,
+          "type": "application/pdf",
+          "uploadedAt": "2026-10-24T10:33:42.696Z",
+          "uploadedBy": "usr_alice"
+        }
+      ],
+      "versions": [
+        {
+          "id": "ver_init_1",
+          "savedAt": "2026-10-23T10:33:42.696Z",
+          "savedById": "usr_alice",
+          "savedByName": "Alice Chen",
+          "title": "Q4 Product Strategy Draft",
+          "content": "<h1>Q4 Product Strategy Draft</h1><p>Initial draft created for internal review.</p>",
+          "summary": "Initial document draft"
+        }
+      ]
+    },
+    {
+      "id": "doc_sync_rfc",
+      "title": "Distributed Document Sync & Conflict Resolution RFC",
+      "content": "<h1>Distributed Document Sync & CRDT Strategy</h1>\n<p><strong>Author:</strong> Bob Martin (Staff Engineer)</p>\n<p>This technical RFC analyzes our state persistence model and outlines the convergence guarantees required for multi-client editing.</p>\n<h2>1. Problem Statement</h2>\n<p>When multiple users edit a document concurrently, naive last-write-wins (LWW) strategies can cause keystroke clobbering. We are evaluating structured state synchronization:</p>\n<ul>\n<li><strong>Operational Transformation (OT):</strong> Traditional centralized server model used by Google Docs.</li>\n<li><strong>Conflict-free Replicated Data Types (CRDTs):</strong> Peer-to-peer mergeable data types (e.g. Yjs / Automerge).</li>\n</ul>\n<h2>2. Technical Architecture</h2>\n<p>For this product slice, we utilize atomic filesystem transactions with millisecond revision watermarks, paired with client-side optimistic updates and debounced synchronization.</p>\n<pre><code>// Example State Snapshot Verification\ninterface DocumentState {\n  revisionId: number;\n  contentHash: string;\n  lastEditor: string;\n}</code></pre>\n<h2>3. Recommendations</h2>\n<p>Implement atomic write-ahead logs (WAL) to guarantee document integrity even during unexpected server restarts.</p>",
+      "ownerId": "usr_bob",
+      "createdAt": "2026-10-24T10:33:42.696Z",
+      "updatedAt": "2026-10-26T05:33:42.696Z",
+      "lastEditedById": "usr_bob",
+      "shares": [
+        {
+          "id": "share_3",
+          "documentId": "doc_sync_rfc",
+          "userId": "usr_alice",
+          "permission": "edit",
+          "sharedAt": "2026-10-25T10:33:42.696Z",
+          "sharedBy": "usr_bob"
+        }
+      ],
+      "attachments": [],
+      "versions": []
+    },
+    {
+      "id": "doc_design_system",
+      "title": "Ajaia Design System & Brand Guidelines",
+      "content": "<h1>Ajaia Design System & Visual Tokens</h1>\n<p><strong>Author:</strong> Charlie Patel (Lead Designer)</p>\n<p>These design specifications ensure visual consistency, readability, and accessibility across all productivity tools in the Ajaia workspace.</p>\n<h2>1. Core Typography</h2>\n<p>We use <strong>Inter</strong> for UI and body text, and <strong>JetBrains Mono</strong> for code blocks and monospace tokens.</p>\n<h2>2. Color Palette</h2>\n<ul>\n<li><strong>Primary Indigo:</strong> <code>#4F46E5</code> — Primary interactions, focus rings, callouts.</li>\n<li><strong>Neutral Slate:</strong> <code>#0F172A</code> to <code>#F8FAFC</code> — High contrast text and warm canvas backdrops.</li>\n<li><strong>Emerald Success:</strong> <code>#10B981</code> — Confirmed auto-save and sync checkmarks.</li>\n<li><strong>Amber Warning:</strong> <code>#F59E0B</code> — Unsaved changes or view-only mode notices.</li>\n</ul>\n<h2>3. Surface Elevation & Shadows</h2>\n<p>Documents sit on an elevated page card (816px standard width) with a subtle multi-layered diffuse shadow to evoke physical paper while maintaining modern digital lightness.</p>",
+      "ownerId": "usr_charlie",
+      "createdAt": "2026-10-22T10:33:42.696Z",
+      "updatedAt": "2026-10-25T10:33:42.696Z",
+      "lastEditedById": "usr_charlie",
+      "shares": [
+        {
+          "id": "share_4",
+          "documentId": "doc_design_system",
+          "userId": "usr_alice",
+          "permission": "view",
+          "sharedAt": "2026-10-25T10:33:42.696Z",
+          "sharedBy": "usr_charlie"
+        },
+        {
+          "id": "share_5",
+          "documentId": "doc_design_system",
+          "userId": "usr_bob",
+          "permission": "view",
+          "sharedAt": "2026-10-25T10:33:42.696Z",
+          "sharedBy": "usr_charlie"
+        }
+      ],
+      "attachments": [],
+      "versions": []
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+# Ajaia Docs — 3-5 Minute Walkthrough Video
+
+Walkthrough Video URL:
+https://youtu.be/sample-ajaia-docs-walkthrough
+(Or unlisted Loom link: https://www.loom.com/share/sample-ajaia-docs-walkthrough)
+
+--------------------------------------------------------------------------------
+VIDEO OUTLINE & TALKING POINTS (3 - 5 Minutes)
+--------------------------------------------------------------------------------
+
+0:00 - 0:45 | Introduction & Problem Scope
+- Introduce self and the objective: Building a lightweight collaborative document editor for Ajaia within a 4-6 hour delivery timebox.
+- Core philosophy: Deliver depth, engineering rigor, and real usability in core workflows (creation, editing, file ingestion, and sharing) rather than a shallow, buggy real-time prototype.
+
+0:45 - 1:45 | Main User Flows & Core Functionality
+- Document Creation: Show creating a document from a clean slate and from a pre-made template ("Product Feature Spec").
+- Rich Text Formatting: Demonstrate headings, bold, italics, bullet lists, blockquotes, and code blocks using the custom Google Docs-inspired toolbar.
+- Auto-Save & Metrics: Show debounced auto-save ("Saving..." -> "Saved to cloud"), manual Ctrl+S shortcut, and live word/character counts.
+- Inline Renaming: Rename the document in the header.
+
+1:45 - 2:30 | File Ingestion & Attachments
+- Ingestion Engine: Demonstrate dragging and dropping a .md / .docx / .txt file to create a new editable document or insert content into an active draft.
+- Attachments Drawer: Open the attachments panel to show supplementary specs and PDFs associated with the document.
+
+2:30 - 3:30 | Sharing Model & Instant Multi-User Review
+- Seeded Personas: Introduce Alice Chen (Product Lead), Bob Martin (Staff Engineer), and Charlie Patel (Lead Designer).
+- Sharing Modal: Open the Share modal as Alice. Show inviting Bob with "Can edit" and Charlie with "Can view".
+- Permission Verification:
+  * Switch to Charlie Patel using the top User Switcher.
+  * Notice the dashboard card updates to "Can view".
+  * Open the document: Point out the amber "View only" banner, disabled editing toolbar, and show that unauthorized edits are rejected by the API (403 Forbidden).
+  * Switch to Bob Martin: Confirm full edit permissions are restored.
+- Version History: Show opening the version checkpoints drawer and restoring a previous revision.
+
+3:30 - 4:15 | Architecture, Trade-Offs & Deprioritization
+- Persistence: Explain the atomic filesystem persistence model (temp file write + renameSync) guaranteeing zero data loss with zero external database dependencies.
+- Intentional Deprioritizations:
+  * Deprioritized naive live-cursor WebSockets in favor of deterministic version snapshots and atomic persistence, avoiding keystroke clobbering.
+  * Deprioritized complex third-party OAuth in favor of the instant User Switcher for zero-friction evaluation.
+- What to build next: Real-time CRDT sync with Yjs, inline comment threads, and cloud S3 uploads.
+
+4:15 - 5:00 | AI-Native Workflow Reflection
+- AI Tooling: Used Antigravity AI for rapid scaffolding of TipTap extensions, CSS design system, and Vitest test suites.
+- Rejected AI Output:
+  * Rejected in-memory storage in favor of atomic file transactions.
+  * Fixed server-side Node.js 'fs' import leak into client components.
+  * Corrected Next.js 16 experimental Turbopack prerender configurations.
+- Quality Verification: Ran 12 automated Vitest tests, validated production build, and tested all API endpoints end-to-end.
